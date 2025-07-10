@@ -7,7 +7,7 @@
 <!-- Section content -->
 <?= $this->section('content') ?>
 
-<?= $this->include('modulesUnidades_medida/modalCaptureUnidades_medida') ?>
+<?= $this->include('julio101290\boilerplateunidadesmedidas\Views\modulesUnidades_medida/modalCaptureUnidades_medida') ?>
 
 <!-- SELECT2 EXAMPLE -->
 <div class="card card-default">

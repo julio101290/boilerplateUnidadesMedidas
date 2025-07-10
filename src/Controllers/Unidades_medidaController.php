@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Controllers;
+namespace julio101290\boilerplateunidadesmedidas\Controllers;
 
 use App\Controllers\BaseController;
-use \App\Models\{
+use julio101290\boilerplateunidadesmedidas\Models\{
     Unidades_medidaModel
 };
-use App\Models\LogModel;
+use julio101290\boilerplatelog\Models\LogModel;
 use CodeIgniter\API\ResponseTrait;
-use App\Models\EmpresasModel;
+use julio101290\boilerplatecompanies\Models\EmpresasModel;
 
 class Unidades_medidaController extends BaseController {
 
@@ -46,13 +46,58 @@ class Unidades_medidaController extends BaseController {
 
 
         if ($this->request->isAJAX()) {
-            $datos = $this->unidades_medida->mdlGetUnidades_medida($empresasID);
+            $request = $this->request;
 
-            return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
+            $draw = (int) $request->getGet('draw');
+            $start = (int) $request->getGet('start');
+            $length = (int) $request->getGet('length');
+            $search = $request->getGet('search')['value'] ?? '';
+            $orderColumnIndex = (int) $request->getGet('order')[0]['column'] ?? 0;
+            $orderDirection = $request->getGet('order')[0]['dir'] ?? 'asc';
+
+            $columns = [
+                'a.id',
+                'a.descripcion',
+                'b.nombre',
+                'a.created_at',
+                'a.updated_at',
+            ];
+            $orderColumn = $columns[$orderColumnIndex] ?? 'a.id';
+
+            // Builder base
+            $builder = $this->unidades_medida->mdlGetUnidades_medida($empresasID);
+
+            // Total de registros sin filtrar
+            $total = $builder->countAllResults(false);
+
+            // Filtro de búsqueda
+            if ($search !== '') {
+                $builder->groupStart()
+                        ->like('a.descripcion', $search)
+                        ->orLike('b.nombre', $search)
+                        ->groupEnd();
+            }
+
+            // Total con filtro
+            $filtered = $builder->countAllResults(false);
+
+            // Orden y límite
+            $builder->orderBy($orderColumn, $orderDirection)
+                    ->limit($length, $start);
+
+            // Resultado final
+            $data = $builder->get()->getResultArray();
+
+            return $this->response->setJSON([
+                        'draw' => $draw,
+                        'recordsTotal' => $total,
+                        'recordsFiltered' => $filtered,
+                        'data' => $data
+            ]);
         }
         $titulos["title"] = lang('unidades_medida.title');
         $titulos["subtitle"] = lang('unidades_medida.subtitle');
-        return view('unidades_medida', $titulos);
+        return view('julio101290\boilerplateunidadesmedidas\Views\unidades_medida', $titulos);
     }
 
     /**
@@ -140,9 +185,7 @@ class Unidades_medidaController extends BaseController {
         $this->log->save($logData);
         return $this->respondDeleted($found, lang('unidades_medida.msg_delete'));
     }
-    
-    
-    
+
     /**
      * Lista de tipos de Unidades via AJax
      */

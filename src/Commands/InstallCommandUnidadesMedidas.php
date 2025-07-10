@@ -1,6 +1,6 @@
 <?php
 
-namespace julio101290\boilerplateproducts\Commands;
+namespace julio101290\boilerplateunidadesmedidas\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
 use Config\Database;
@@ -10,7 +10,7 @@ use CodeIgniter\CLI\CLI;
 /**
  * Class InstallCommand.
  */
-class InstallCommandProducts extends BaseCommand
+class InstallCommandUnidadesMedidas extends BaseCommand
 {
     /**
      * The group the command is lumped under
@@ -18,28 +18,28 @@ class InstallCommandProducts extends BaseCommand
      *
      * @var string
      */
-    protected $group = 'boilerplateproducts';
+    protected $group = 'boilerplateunidadesmedidas';
 
     /**
      * The command's name.
      *
      * @var string
      */
-    protected $name = 'boilerplateproducts:installproducts';
+    protected $name = 'boilerplateunidadesmedidas:installunidadesmedidas';
 
     /**
      * The command's short description.
      *
      * @var string
      */
-    protected $description = 'Db install for basic boilerplate products data.';
+    protected $description = 'Db install for basic boilerplate units of measurement data.';
 
     /**
      * The command's usage.
      *
      * @var string
      */
-    protected $usage = 'boilerplateproducts:installproducts';
+    protected $usage = 'boilerplateunidadesmedidas:installunidadesmedidas';
 
     /**
      * The commamd's argument.
@@ -72,7 +72,7 @@ class InstallCommandProducts extends BaseCommand
             $this->call('migrate');
             // then seed data
             $seeder = Database::seeder();
-            $seeder->call('julio101290\boilerplateproducts\Database\Seeds\BoilerplateProducts');
+            $seeder->call('julio101290\boilerplateunidadesmedidas\Database\Seeds\BoilerplateUnidadesMedida');
         } catch (\Exception $e) {
             $this->showError($e);
         }

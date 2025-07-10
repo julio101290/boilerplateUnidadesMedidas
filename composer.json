@@ -1,6 +1,6 @@
 {
     "name": "julio101290/boilerplateunidadesmedidas",
-    "description": "CodeIgniter4 Catalogo simple de unidades de medida",
+    "description": "CodeIgniter4 Simple Units of Measure Catalog",
     "keywords": [
         "codeigniter4",
         "backup",
@@ -15,7 +15,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "julio101920",
+            "name": "julio101290",
             "email": "juliocesar101290@hotmail.com"
         }
     ],
